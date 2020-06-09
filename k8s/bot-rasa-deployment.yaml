@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ../kompose convert -f docker-compose.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: bot-rasa
+  name: bot-rasa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: bot-rasa
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: ../kompose convert -f docker-compose.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: bot-rasa
+    spec:
+      containers:
+      - args:
+        - run
+        image: rasa/rasa
+        imagePullPolicy: ""
+        name: bot-rasa
+        ports:
+        - containerPort: 5005
+        resources: {}
+        volumeMounts:
+        - mountPath: /app
+          name: bot-rasa-claim0
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: bot-rasa-claim0
+        persistentVolumeClaim:
+          claimName: bot-rasa-claim0
+status: {}
